@@ -10,13 +10,13 @@ int minButton = 14;
 int count = 0 ;
 
 #include <virtuabotixRTC.h>                                                                              
-virtuabotixRTC myRTC(6, 7, 8); // CLK , DATA , RST
+virtuabotixRTC myRTC(6, 7, 5); // CLK , DATA , RST
 
 Servo myservo; 
 #define ledPin 7 //test for bluetooth
 int state = 0; // state for led 
 
-const int stepsPerRevolution = 200;  // change this to fit the number of steps per revolution
+const int stepsPerRevolution = 2048;  // change this to fit the number of steps per revolution
 Stepper myStepper(stepsPerRevolution, 8, 9, 10, 11);
 int currentHour;
 
@@ -36,7 +36,7 @@ struct pill pills[NUM_PILLS] = {
 
 
 void setup() {
-  myStepper.setSpeed(60);
+  myStepper.setSpeed(10);
 Serial.begin(9600);
 pinMode(ledPin, OUTPUT);
 digitalWrite(ledPin, LOW);
@@ -48,7 +48,7 @@ pinMode(minButton, INPUT);
 
 lcd.begin();
 lcd.backlight();
-myRTC.setDS1302Time(00, 27, 5, 5,14, 4, 2023);//but remember to "comment/remove" this function once you're done as I did
+myRTC.setDS1302Time(40, 01, 12, 5,15, 4, 2023);//but remember to "comment/remove" this function once you're done as I did
  //The setup is done only one time and the module will continue counting it automatically
  
 
@@ -57,8 +57,9 @@ myservo.attach(3);
 }
 
 void loop() {
-//myStepper.step(-stepsPerRevolution);
+//myStepper.step(stepsPerRevolution);
 //delay(500);
+
  lcd.setCursor(0, 0);
   
  int buttonState1 = digitalRead(selectButton);
@@ -129,8 +130,7 @@ Serial.println(min);
   Serial.println("LED: ON");
   state = 0;
  } 
-// myservo.write(90);
- 
+
   myRTC.updateTime();
  lcd.setCursor(0,1);
  lcd.print(myRTC.hours);
@@ -141,16 +141,19 @@ Serial.println(min);
  delay(1000);
 lcd.clear();
 for(int i=0 ; i<3 ; i++){
-  if(myRTC.hours == pills[i].hour && myRTC.minutes == pills[i].min){
-   //   myStepper.step(pills[i].stepperPos);
-    //  delay(500);
+  if(myRTC.hours == pills[i].hour && myRTC.minutes == pills[i].min &&myRTC.seconds == 0){
+    // myStepper.step(pills[i].stepperPos);
+    // delay(500);
       myservo.write(90);
       delay(15);
+      Serial.println("servo 90");
       myservo.write(0);
       delay(15);
+       Serial.println("servo 0");
      // myStepper.step(-pills[i].stepperPos);
   }
 }
 
 }
+
 
