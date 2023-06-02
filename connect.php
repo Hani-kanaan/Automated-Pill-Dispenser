@@ -1,7 +1,7 @@
 <?php
 	
 	$dbuser = "id20711878_root";
-	$dbpasswd = "]0^UA=C(gYredv4r";
+	$dbpasswd = "";
 	$dbserver ="localhost";
 	$dbdb = "id20711878_senior";
 	
